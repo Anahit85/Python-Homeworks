@@ -1,4 +1,5 @@
 """*Python OOP պարզ խնդիրներ*"""
+import math
 
 """1. Ստեղծել Person class, որը ունի name եւ age։
 Գրել մեթոդ introduce() որը տպում է
@@ -494,7 +495,400 @@ class BankCard:
 card = BankCard("Armen", 500)
 print(card.deposit(200))  # Balance: 700
 print(card.withdraw(1000))  # "Insufficient funds!"
-print(card.withdraw(300))  # Balance: 400
+print(card.withdraw(300)) # Balance: 400
+
+
+
+
+"""31. Private salary + raise method
+● _salary
+● մեթոդ → increase_salary(percent)"""
+class Salary:
+    def __init__(self, name, salary):
+        self.name = name
+        self._salary = salary
+
+    def increase_salary(self, percent):
+        if percent > 0:
+            self._salary += self._salary * (percent / 100)
+            print(f"Salary increased by {percent}%. New salary: {self._salary}")
+        else:
+            raise ValueError("Increase percentage must be greater than zero.")
+
+employee = Salary("Alice", 5000)
+employee.increase_salary(10)
+
+"""32. Protected speed inheritance
+● _speed → subclass օգտագործի"""
+class ProtectedSpeed:
+    def __init__(self, name, speed):
+        self.name = name
+        self._speed = speed
+
+class Car(ProtectedSpeed):
+    def __init__(self, name, speed):
+        super().__init__(name, speed)
+
+    def display_speed(self):
+        print(f"The speed of {self.name} is {self._speed} km/h")
+
+my_car = Car("Tesla", 250)
+my_car.display_speed()
+
+"""33. Secret key (__key)
+● փորձել դրսից հասնել"""
+class SecretKey:
+    def __init__(self, key):
+        self.__key = key
+s= SecretKey("")
+s.key()
+
+
+"""34. Password hash simulation
+● պահել private
+● public method → check(password)"""
+class Password:
+    def __init__(self, password):
+        self.__password = password
+    def check(self, password):
+        if self.__password == password:
+            return True
+        else:
+            raise ValueError("Incorrect password")
+
+user_password = Password("A1234")
+print(user_password.check(""))
+
+"""35. Read-only ID
+● id → constructor-ում տրվում է
+● չի կարելի փոխել"""
+class ID:
+    def __init__(self, id):
+        self._id = id
+
+    @property
+    def id(self):
+        return self._id
+
+    def read_id(self):
+        try:
+            user.id = 102
+        except AttributeError as e:
+            print(f"Error: {e}")
+
+user = ID(101)
+print(user.id)
+
+"""36. Bank անվտանգություն
+● balance private
+● փոփոխվում է միայն մեթոդներով"""
+class Bank:
+    def __init__(self, initial_balance=0):
+        self.__balance = initial_balance
+
+    def get_balance(self):
+        return self.__balance
+
+    def deposit(self, amount):
+        if amount > 0:
+            self.__balance += amount
+            print(f"Deposited: ${amount}")
+        else:
+            print("Deposit amount must be positive!")
+
+    def withdraw(self, amount):
+        if amount > self.__balance:
+            print("Insufficient funds!")
+            return False
+        elif amount <= 0:
+            print("Withdrawal amount must be positive!")
+            return False
+        else:
+            self.__balance -= amount
+            print(f"Withdrew: ${amount}")
+            return True
+
+account = Bank(100)
+account.deposit(50)
+account.withdraw(30)
+
+"""37. File handler
+● _path private
+● մեթոդ → read()"""
+
+
+def __init__(self, path):
+    self.__path = path
+
+def read(self):
+    try:
+        with open(self.__path, "r") as file:
+            return file.read()
+    except FileNotFoundError:
+        return "Error: The file was not found."
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+"""38. Game score guard
+● score չի կարող նվազել"""
+class GameScore:
+    def __init__(self, initial_score=0):
+        self._score = initial_score
+
+    @property
+    def score(self):
+        return self._score
+
+    @score.setter
+    def score(self, value):
+        if value < self._score:
+            print(f"Score cannot decrease from {self._score} to {value}!")
+        else:
+            self._score = value
+
+
+player = GameScore(100)
+player.score = 150
+print(f"Current Score: {player.score}")
+player.score = 80
+print(f"Current Score: {player.score}")
+
+"""39. Employee bonus hidden
+● private bonus
+● method → calculate total salary"""
+class Employee:
+    def __init__(self, name, salary, bonus=0):
+        self.name = name
+        self.salary = salary
+        self.__bonus = bonus
+
+    def get_total_salary(self):
+        total = self.salary + self.__bonus
+        return total
+
+emp = Employee("John", 1500, 500)
+
+print(f"Employee: {emp.name}")
+print(f"Base Salary: ${emp.salary}")
+print(f"Total Pay +ink bonus: ${emp.get_total_salary()}")
+
+"""40. API key protected
+● _api_key
+● public method → simulate request"""
+class APIKey:
+    def __init__(self, api_key):
+        self.__api_key = api_key
+    @property
+    def api_key(self):
+        return self.__api_key
+    def simulate_request(self, endpoint):
+        if not self.__api_key:
+            return " No API key provided."
+        print(f"Connecting to {endpoint}...")
+        print(f"Using credentials: {self.__api_key[:4]}") #Mask
+        return "Request Successful: 200 OK"
+
+
+service = APIKey("7892341125")
+response = service.simulate_request("userdata")
+print(response)
+
+"""41–50. Inheritance + super()
+
+41. Animal → Dog override
+● sound() override"""
+class Animal:
+    def sound(self):
+        print("Some generic animal sound")
+
+class Dog(Animal):
+    def sound(self):
+        print("Woof! Woof!")
+
+class Cat(Animal):
+    def sound(self):
+        print("Meow!")
+
+my_dog = Dog()
+my_dog.sound()
+my_cat = Cat()
+my_cat.sound()
+animal_override = Dog("Dog", "Cat")
+animal_dog = Dog("Dog", "cat")
+
+"""42. Animal → Cat տարբեր վարք
+● override մեթոդ"""
+class Animal(Animal):
+    def sound(self):
+        print("Some generic animal sound")
+    def run(self):
+        print("Running...")
+class Dog(Animal):
+    def sound(self):
+        print("Woof! Woof!")
+    def run(self):
+        print("Ihe dog is running away")
+
+my_dog = Dog()
+my_dog.sound()
+my_dog.run()
+
+"""43. Employee → Manager salary
+● base salary + bonus"""
+class Employee:
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    def calculate_salary(self):
+        return self.salary
+
+class Manager(Employee):
+    def __init__(self, name, salary, bonus):
+        super().__init__(name, salary)
+        self.bonus = bonus
+    def calculate_salary(self):
+        return self.salary + self.bonus
+
+emp = Employee("John", 1500)
+mgr = Manager("Alice", 3000, 1000)
+print(f"Employee {emp.name} Salary: ${emp.calculate_salary()}")
+print(f"Manager {mgr.name} Total Pay: ${mgr.calculate_salary()}")
+
+
+"""44. Shape → Rectangle area
+● override area()"""
+class Shape:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+class Rectangle(Shape):
+    def __init__(self, width, height):
+        super().__init__(width, height)
+        self.area = self.width * self.height
+
+rectangle = Shape(100, 100)
+print(f"Rectangle: {rectangle.width}")
+print(f"Rectangle: {rectangle.height}")
+print(f"Calculated Area: {rectangle.area()}")
+
+"""45. Shape → Circle area
+● օգտագործել π"""
+class Shape:
+    def area(self):
+        return 0
+
+class Circle(Shape):
+    def __init__(self, radius):
+        super().__init__()
+        self.radius = radius
+
+    def area(self):
+        #OVERRIDE
+        return math.pi * self.radius ** 2
+
+my_circle = Circle(10)
+print(f"Circle: {my_circle.area()}")
+print(f"Circle Area: {my_circle.area()}")
+
+"""46. Vehicle → ElectricCar
+● super() → init"""
+class Vehicle:
+    def __init__(self, brand, model, year):
+        self.brand = brand
+        self.model = model
+        self.year = year
+
+    def display_info(self):
+        print(f"{self.year} {self.brand} {self.model}")
+
+class ElectricCar(Vehicle):
+    def __init__(self, brand, model, year, battery_size):
+        super().__init__(brand, model, year)
+        self.battery_size = battery_size
+
+    def display_info(self):
+        # Overriding
+        print(f"{self.year} {self.brand} {self.model} with a {self.battery_size}kWh battery")
+
+my_tesla = ElectricCar("Tesla", "Model S", 2024, 100)
+my_tesla.display_info()
+
+"""47. Vehicle → Bike override
+● redefine method"""
+class Vehicle:
+    def __init__(self, car, model, year):
+        self.car = car
+        self.model = model
+        self.year = year
+    def move(self):
+        print("Moving...")
+
+class Bike(Vehicle):
+    def __init__(self, model, year):
+        super().__init__(model, year)
+
+    def move(self):
+        print("Driving...")
+
+my_vehicle = Vehicle("Toyota", "Camry", 2022)
+my_bike = Bike("Giant", "Escape 3", 2023)
+my_vehicle.move()
+my_bike.move()
+
+"""48. Multi-level inheritance
+A → B → C
+● բոլոր init-ները կանչել super()-ով"""
+class A:
+    def __init__(self, model):
+        self.model = model
+
+class B(A):
+    def __init__(self, b):
+        super().__init__()
+        self.b = b
+class C(B):
+    def __init__(self, c):
+        super().__init__()
+        self.c = c
+
+"""49. Multiple inheritance (A, B → C)
+● method resolution order տեսնել"""
+class A:
+    def __init__(self, model):
+        self.model = model
+class B:
+    def __init__(self, b):
+        super().__init__()
+        self.b = b
+class C(A,B):
+    def __init__(self, c):
+        super().__init__()
+        self.c = c
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
